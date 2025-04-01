@@ -1,1 +1,15 @@
+#The French Roulette
+#bibliothèques
+from random import*
 
+#PV des joueurs
+PVJ1=3
+PVJ2=3
+
+def choix_balles(x):
+    balles=[]
+    nbchargées=randint(1,x-1)
+    for i in x:
+        if 
+        balles.append(1)
+    
