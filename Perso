@@ -1,0 +1,13 @@
+#ici le code sur la classe perso
+class Personnage:
+  def __init__(self,human=None):
+    self.human=human
+    if human==None:
+        self.human=input("Are you human?(yes/no)")
+    if self.human=="yes":
+        print("you're human")
+    else:
+        print("you're NOT human")
+
+perso1=Personnage()
+bot1=Personnage(False)
