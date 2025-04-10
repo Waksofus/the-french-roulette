@@ -1,13 +1,102 @@
-#ici le code sur la classe perso
-class Personnage:
-  def __init__(self,human=None):
-    self.human=human
-    if human==None:
-        self.human=input("Are you human?(yes/no)")
-    if self.human=="yes":
-        print("you're human")
-    else:
-        print("you're NOT human")
+import pygame
+import sys
 
-perso1=Personnage()
-bot1=Personnage(False)
+pygame.init()
+
+# Couleurs
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+GREEN = (0, 200, 0)
+RED = (200, 0, 0)
+
+# Fenêtre
+WIDTH, HEIGHT = 400, 300
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Human Check")
+
+# Police
+font = pygame.font.SysFont(None, 36)
+
+class Button:
+    def __init__(self, x, y, w, h, text, color, callback):
+        self.rect = pygame.Rect(x, y, w, h)
+        self.text = text
+        self.color = color
+        self.callback = callback
+
+    def draw(self, surface):
+        pygame.draw.rect(surface, self.color, self.rect)
+        txt_surface = font.render(self.text, True, WHITE)
+        txt_rect = txt_surface.get_rect(center=self.rect.center)
+        surface.blit(txt_surface, txt_rect)
+
+    def handle_event(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if self.rect.collidepoint(event.pos):
+                self.callback()
+
+class Personnage:
+    def __init__(self, human=None):
+        self.human = human
+        self.result_message = None
+
+    def set_human(self, is_human):
+        self.human = is_human
+        if self.human:
+            self.result_message = "You're human"
+        else:
+            self.result_message = "You're NOT human"
+
+# Création du personnage
+perso1 = Personnage()
+
+# Boutons
+yes_button = Button(100, 180, 80, 40, "Yes", GREEN, lambda: perso1.set_human(True))
+no_button = Button(220, 180, 80, 40, "No", RED, lambda: perso1.set_human(False))
+
+# Boucle principale
+running = True
+showing_result = False
+result_time = 0
+
+while running:
+    # Choix de la couleur de fond selon la réponse
+    if perso1.result_message is None:
+        background_color = WHITE
+    else:
+        background_color = GREEN if perso1.human else RED
+
+    screen.fill(background_color)
+
+    if perso1.result_message is None:
+        # Affiche la question et les boutons
+        question_surface = font.render("Are you human?", True, BLACK)
+        question_rect = question_surface.get_rect(center=(WIDTH // 2, 100))
+        screen.blit(question_surface, question_rect)
+
+        yes_button.draw(screen)
+        no_button.draw(screen)
+    else:
+        # Affiche le message final
+        result_surface = font.render(perso1.result_message, True, WHITE)
+        result_rect = result_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2))
+        screen.blit(result_surface, result_rect)
+
+        # Délai avant fermeture
+        if not showing_result:
+            result_time = pygame.time.get_ticks()
+            showing_result = True
+        elif pygame.time.get_ticks() - result_time > 2000:
+            running = False
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        if perso1.result_message is None:
+            yes_button.handle_event(event)
+            no_button.handle_event(event)
+
+    pygame.display.flip()
+
+pygame.quit()
+sys.exit()
