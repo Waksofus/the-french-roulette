@@ -42,10 +42,7 @@ class Personnage:
 
     def set_human(self, is_human):
         self.human = is_human
-        if self.human:
-            self.result_message = "You're human"
-        else:
-            self.result_message = "You're NOT human"
+        self.result_message = "You're human" if is_human else "You're NOT human"
 
 # Création du personnage
 perso1 = Personnage()
@@ -57,19 +54,30 @@ no_button = Button(220, 180, 80, 40, "No", RED, lambda: perso1.set_human(False))
 # Boucle principale
 running = True
 showing_result = False
-result_time = 0
+result_start_time = 0
+blink_interval = 200  # ms
+last_blink_time = 0
+blink_state = False  # True = color, False = white
 
 while running:
-    # Choix de la couleur de fond selon la réponse
+    current_time = pygame.time.get_ticks()
+
     if perso1.result_message is None:
         background_color = WHITE
     else:
-        background_color = GREEN if perso1.human else RED
+        # Clignotement : alterne toutes les 200ms
+        if current_time - last_blink_time >= blink_interval:
+            blink_state = not blink_state
+            last_blink_time = current_time
+
+        if blink_state:
+            background_color = GREEN if perso1.human else RED
+        else:
+            background_color = WHITE
 
     screen.fill(background_color)
 
     if perso1.result_message is None:
-        # Affiche la question et les boutons
         question_surface = font.render("Are you human?", True, BLACK)
         question_rect = question_surface.get_rect(center=(WIDTH // 2, 100))
         screen.blit(question_surface, question_rect)
@@ -77,16 +85,15 @@ while running:
         yes_button.draw(screen)
         no_button.draw(screen)
     else:
-        # Affiche le message final
-        result_surface = font.render(perso1.result_message, True, WHITE)
+        result_surface = font.render(perso1.result_message, True, BLACK)
         result_rect = result_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2))
         screen.blit(result_surface, result_rect)
 
-        # Délai avant fermeture
         if not showing_result:
-            result_time = pygame.time.get_ticks()
+            result_start_time = current_time
+            last_blink_time = current_time
             showing_result = True
-        elif pygame.time.get_ticks() - result_time > 2000:
+        elif current_time - result_start_time > 2000:
             running = False
 
     for event in pygame.event.get():
