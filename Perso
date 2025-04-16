@@ -1,109 +1,64 @@
-import pygame
-import sys
+import random
+import time
 
-pygame.init()
+class Perso:
+    def __init__(self, nom, type_joueur="humain"):
+        self.nom = nom
+        self.type = type_joueur
+        self.pv = 3
 
-# Couleurs
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-GREEN = (0, 200, 0)
-RED = (200, 0, 0)
+    def est_en_vie(self):
+        return self.pv > 0
 
-# Fenêtre
-WIDTH, HEIGHT = 400, 300
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Human Check")
+    def perdre_pv(self, degats=1):
+        self.pv -= degats
+        print(f"{self.nom} perd {degats} PV. Il lui reste {self.pv} PV.")
 
-# Police
-font = pygame.font.SysFont(None, 36)
-
-class Button:
-    def __init__(self, x, y, w, h, text, color, callback):
-        self.rect = pygame.Rect(x, y, w, h)
-        self.text = text
-        self.color = color
-        self.callback = callback
-
-    def draw(self, surface):
-        pygame.draw.rect(surface, self.color, self.rect)
-        txt_surface = font.render(self.text, True, WHITE)
-        txt_rect = txt_surface.get_rect(center=self.rect.center)
-        surface.blit(txt_surface, txt_rect)
-
-    def handle_event(self, event):
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if self.rect.collidepoint(event.pos):
-                self.callback()
-
-class Personnage:
-    def __init__(self, human=None):
-        self.human = human
-        self.result_message = None
-
-    def set_human(self, is_human):
-        self.human = is_human
-        self.result_message = "You're human" if is_human else "You're NOT human"
-
-# Création du personnage
-perso1 = Personnage()
-
-# Boutons
-yes_button = Button(100, 180, 80, 40, "Yes", GREEN, lambda: perso1.set_human(True))
-no_button = Button(220, 180, 80, 40, "No", RED, lambda: perso1.set_human(False))
-
-# Boucle principale
-running = True
-showing_result = False
-result_start_time = 0
-blink_interval = 200  # ms
-last_blink_time = 0
-blink_state = False  # True = color, False = white
-
-while running:
-    current_time = pygame.time.get_ticks()
-
-    if perso1.result_message is None:
-        background_color = WHITE
-    else:
-        # Clignotement : alterne toutes les 200ms
-        if current_time - last_blink_time >= blink_interval:
-            blink_state = not blink_state
-            last_blink_time = current_time
-
-        if blink_state:
-            background_color = GREEN if perso1.human else RED
+    def jouer(self):
+        if self.type == "humain":
+            action = ""
+            while action not in ["tirer", "passer"]:
+                action = input(f"{self.nom}, choisis une action (tirer / passer) : ").lower()
+            return action
         else:
-            background_color = WHITE
+            # IA bot
+            action = "passer" if (self.pv == 1 and random.random() < 0.6) else "tirer"
+            print(f"{self.nom} choisit de {action}")
+            time.sleep(1)
+            return action
 
-    screen.fill(background_color)
 
-    if perso1.result_message is None:
-        question_surface = font.render("Are you human?", True, BLACK)
-        question_rect = question_surface.get_rect(center=(WIDTH // 2, 100))
-        screen.blit(question_surface, question_rect)
+# === MINI SIMU ===
+joueur = Perso("Ethan", "humain")
+bot = Perso("Bot-01", "bot")
 
-        yes_button.draw(screen)
-        no_button.draw(screen)
+joueurs = [joueur, bot]
+tour = 0
+
+print("=== Début du jeu ===\n")
+
+while all(p.est_en_vie() for p in joueurs):
+    joueur_actuel = joueurs[tour % 2]
+    print(f"\n--- Tour de {joueur_actuel.nom} ---")
+    
+    action = joueur_actuel.jouer()
+    
+    if action == "tirer":
+        # 50% chance de se tirer dessus (juste pour test)
+        if random.random() < 0.5:
+            print(f"{joueur_actuel.nom} tire... et BOOM !")
+            joueur_actuel.perdre_pv()
+        else:
+            print(f"{joueur_actuel.nom} tire... à blanc !")
     else:
-        result_surface = font.render(perso1.result_message, True, BLACK)
-        result_rect = result_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2))
-        screen.blit(result_surface, result_rect)
+        print(f"{joueur_actuel.nom} passe son tour.")
+    
+    tour += 1
 
-        if not showing_result:
-            result_start_time = current_time
-            last_blink_time = current_time
-            showing_result = True
-        elif current_time - result_start_time > 2000:
-            running = False
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        if perso1.result_message is None:
-            yes_button.handle_event(event)
-            no_button.handle_event(event)
-
-    pygame.display.flip()
-
-pygame.quit()
-sys.exit()
+# Fin
+print("\n=== Fin de la partie ===")
+for p in joueurs:
+    if p.est_en_vie():
+        print(f"{p.nom} a survécu !")
+    else:
+        print(f"{p.nom} est mort...")
