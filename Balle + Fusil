@@ -1,0 +1,52 @@
+class Balle():
+
+    def __init__(self) :
+        pass
+
+    def balle_chargée(self):
+        chargée = self.random()
+        return "chargée" if chargée > 0.5 else "pas chargée"
+
+class Fusil():
+    
+    def __init__(self, liste_de_balles) :
+        self.liste_de_balles = liste_de_balles
+    
+    def remplir_fusil(self):
+        balles_dans_fusil = []
+        for balle in self.liste_de_balles:
+            balle = self.liste_de_balles.randint(0,len(self.liste_de_balles))
+            balles_dans_fusil.append(balle)
+            del(balle)
+        return balles_dans_fusil
+    
+    def choisir_sur_qui_tirer(self):
+        choix = print("Se tirer dessus ou tirer sur l'adversaire : joueur/adversaire -> ").lower
+        if choix == "joueur":
+            Perso.tirer()
+
+
+
+
+
+
+
+
+
+
+#balle1 = Balle()
+#balle2 = Balle()
+#balle3 = Balle()
+#balle4 = Balle()
+#balle5 = Balle()
+
+
+balle = 0
+for i in range (0,6):
+    balle[i] = Balle()
+
+for i in range (0,6):
+    balle[i].balle_chargée()
+
+fusil = Fusil([balle1, balle2, balle3, balle4, balle5])
+fusil.remplir_fusil()
