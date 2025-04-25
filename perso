@@ -1,0 +1,23 @@
+class Perso:
+    def __init__(self, nom, is_bot=False): #Initialisation de la classe Personnage
+        self.nom = nom
+        self.pv = 3
+        self.is_bot = is_bot
+        self.vient_de_perdre_pv=False
+
+    def est_vivant(self): #Méthode qui renvoie si le perso est vivant ou non
+        return self.pv > 0
+
+    def perdre_pv(self): #Méthode qui enleve un PV au perso
+        self.pv -= 1
+        self.vient_de_perdre_pv=True
+
+    def action_tirer(self, joueur_cible, balle_est_chargée): #Méthode qui permet de choisir sur qui tirer et qui enleve des PV si nécéssaire
+        # Logique du tir
+        joueur_cible.vient_de_perdre_pv=False
+        print(f"{self.nom}({self.pv}PV) tire une balle sur {joueur_cible.nom}({joueur_cible.pv}PV)")
+        if balle_est_chargée:
+            joueur_cible.perdre_pv()
+            print(f"Aïe ! {joueur_cible.nom} a perdu un PV : il lui reste {joueur_cible.pv}PV")
+        else:
+            print(f"Ouf ! {joueur_cible.nom} n'a pas pris de dégats : la balle était à blanc !")
