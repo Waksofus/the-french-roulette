@@ -3,7 +3,7 @@ BLEU = (0, 85, 164)
 BLANC = (255, 255, 255)
 ROUGE = (239, 65, 53)
 
-# Thème Tour Eiffel / Paris
+# Theme Tour Eiffel / Paris
 FOND_PARIS = (30, 30, 40)
 FROMAGE = (255, 240, 180)
 BAGUETTE = (193, 154, 107)
