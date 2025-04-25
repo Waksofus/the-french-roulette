@@ -1,0 +1,8 @@
+import random
+
+class Balle:
+    def __init__(self): #Initialisation de la classe Balle
+        self.chargée = random.random() > 0.5 #Détermine si la balle est pleine de manière aléatoire
+
+    def est_chargée(self): #Méthode qui renvoie si la balle est chargée ou non
+        return self.chargée
