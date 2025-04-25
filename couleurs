@@ -1,0 +1,13 @@
+# Couleurs principales 
+BLEU = (0, 85, 164)
+BLANC = (255, 255, 255)
+ROUGE = (239, 65, 53)
+
+# Thème Tour Eiffel / Paris
+FOND_PARIS = (30, 30, 40)
+FROMAGE = (255, 240, 180)
+BAGUETTE = (193, 154, 107)
+BERET = (60, 60, 60)
+TEXTE = (240, 240, 240)
+PV_BARRE = (255, 80, 80)
+PV_FOND = (100, 20, 20)
