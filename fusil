@@ -4,38 +4,38 @@ from balle import Balle
 class Fusil:
     def __init__(self, nb_balles=6): #Initialisation de la classe Fusil
         self.nb_balles = nb_balles
-        self.nb_balles_chargées=0
+        self.nb_balles_chargees=0
         self.nb_balles_blanc=0
         self.balles = []
         self.index = 0
         self.recharger()
 
-    def recharger(self): #Méthode qui créer une liste de balles dans le fusil
+    def recharger(self): #Methode qui creer une liste de balles dans le fusil
         self.balles = []
         for i in range(self.nb_balles):
             new_balle=Balle()
-            if new_balle.est_chargée:
-                self.nb_balles_chargées+=1
+            if new_balle.est_chargee:
+                self.nb_balles_chargees+=1
             else:
                 self.nb_balles_blanc+=1
-            if i == self.nb_balles-1: #Au moment d'ajouter la dernière balle on s'assure qu'elle soit différente des précédentes
+            if i == self.nb_balles-1: #Au moment d'ajouter la derniere balle on s'assure qu'elle soit differente des precedentes
                 if self.nb_balles_blanc == 0:
-                    new_balle.chargée = True
-                elif self.nb_balles_chargées == 0:
-                    new_balle.chargée = False
+                    new_balle.chargee = True
+                elif self.nb_balles_chargees == 0:
+                    new_balle.chargee = False
             self.balles.append(new_balle)
-        random.shuffle(self.balles) #On remélange les balles pour être sûr qu'elles soient bien mélangées
+        random.shuffle(self.balles) #On remelange les balles pour etre sur qu'elles soient bien melangees
         self.index = 0
-        print("[Fusil] Rechargé avec de nouvelles balles !")
+        print("[Fusil] Recharge avec de nouvelles balles !")
 
-    def tirer(self): #Méthode qui renvoie le type de balle
+    def tirer(self): #Methode qui renvoie le type de balle
         if self.index >= self.nb_balles:
             print("[Fusil] Plus de balles dans le fusil ! On recharge !")
             self.recharger()
 
         balle = self.balles[self.index]
         self.index += 1
-        return balle.est_chargée()
+        return balle.est_chargee()
 
-    def balles_restantes(self): #Méthode qui regarde le nombre de balles restantes
+    def balles_restantes(self): #Methode qui regarde le nombre de balles restantes
         return self.nb_balles - self.index
