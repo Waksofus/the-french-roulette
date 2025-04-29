@@ -19,5 +19,7 @@ class Perso:
         if balle_est_chargee:
             joueur_cible.perdre_pv()
             print(f"Aïe ! {joueur_cible.nom} a perdu un PV : il lui reste {joueur_cible.pv}PV")
+            return True
         else:
             print(f"Ouf ! {joueur_cible.nom} n'a pas pris de degats : la balle etait a blanc !")
+            return False
