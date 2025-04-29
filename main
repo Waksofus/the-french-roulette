@@ -37,9 +37,9 @@ def dessiner_pv(perso, x, y):
     pygame.draw.rect(screen, PV_BARRE, (x, y, 200 * (perso.pv / 3), 20))  #Ratio PV restant
 
 #Images (les images a ajouter dans le dossier assets si tu veux les personnaliser)
-tour_eiffel = pygame.image.load('Desktop/Projet NSI/assets/tour_eiffel.png')  #Image a telecharger/ajouter
-baguette_image = pygame.image.load('Desktop/Projet NSI/assets/baguette.png')
-beret_image = pygame.image.load('Desktop/Projet NSI/assets/beret.png')
+#tour_eiffel = pygame.image.load('Desktop/Projet NSI/assets/tour_eiffel.png')  #Image a telecharger/ajouter
+#baguette_image = pygame.image.load('Desktop/Projet NSI/assets/baguette.png')
+#beret_image = pygame.image.load('Desktop/Projet NSI/assets/beret.png')
 
 #Classes initialisees
 joueur = Perso("Joueur")
@@ -64,19 +64,36 @@ while running:
             if pv_perdu:
                 texte_info = font_petit.render(f"{joueur_cible.nom} a pris une balle !", True, TEXTE)
                 screen.blit(texte_info, (250, 500))
+                pygame.display.flip()
+                time.sleep(1)
             else:
                 texte_info = font_petit.render("Balle a blanc ! Rien n'est arrive.", True, TEXTE)
                 screen.blit(texte_info, (250, 500))
+                pygame.display.flip()
+                time.sleep(1)
             if joueur_cible.vient_de_perdre_pv or joueur_avec_fusil!=joueur_cible: #Le joueur vient de toucher (lui ou le bot) ou tirer a blanc sur l'autre => on change de joueur
                 joueur_avec_fusil=(joueur if joueur_avec_fusil.is_bot else bot)
+                dessiner_pv(joueur, 100, 250)
+                dessiner_pv(bot, 500, 250)
+                pygame.display.flip()
                 while joueur_avec_fusil.is_bot and bot.est_vivant() and joueur.est_vivant(): #Le bot rejoue tant que c'est a lui (s'il se tire a blanc dessus) et si tout le monde est en vie
                     #STRAT DU BOT 
-                    time.sleep(2)
+                    time.sleep(3)
                     if joueur_avec_fusil.pv == 1: #S’il est en danger, le bot tire uniquement sur le joueur
                         joueur_cible = joueur
                     else: #50% de chance de se tirer ou tirer l'autre
                         joueur_cible = bot if random.random() > 0.5 else joueur
                     pv_perdu = joueur_avec_fusil.action_tirer(joueur_cible, fusil.tirer())
+                    if pv_perdu:
+                        texte_info = font_petit.render(f"{joueur_cible.nom} a pris une balle !", True, TEXTE)
+                        screen.blit(texte_info, (250, 500))
+                        pygame.display.flip()
+                        time.sleep(1)
+                    else:
+                        texte_info = font_petit.render("Balle a blanc ! Rien n'est arrive.", True, TEXTE)
+                        screen.blit(texte_info, (250, 500))
+                        pygame.display.flip()
+                        time.sleep(1)
                     if joueur_cible.vient_de_perdre_pv or joueur_avec_fusil!=joueur_cible: #Le bot vient de toucher (lui ou le joueur) ou tirer a blanc sur l'autre => on change de joueur
                         joueur_avec_fusil=joueur
 
