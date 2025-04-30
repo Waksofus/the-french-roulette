@@ -19,6 +19,21 @@ font = pygame.font.Font(None, 36)
 font_petit = pygame.font.Font(None, 24)
 
 #Fonction pour dessiner le fond et les elements du jeu
+def refresh():
+     #Dessiner fond
+    dessiner_fond()
+    
+    #Dessiner personnages
+    dessiner_perso(joueur, 100, 300)
+    dessiner_perso(bot, 500, 300)
+    
+    #Dessiner PV
+    dessiner_pv(joueur, 100, 250)
+    dessiner_pv(bot, 500, 250)
+    
+    #Actualiser l'ecran
+    pygame.display.flip()
+
 def dessiner_fond():
     #Fond Tour Eiffel
     screen.fill(FOND_PARIS)
@@ -60,57 +75,61 @@ while running:
                 joueur_cible=joueur
             if event.button == 3:  #Clic droit = tirer sur bot
                 joueur_cible=bot
+            
             pv_perdu = joueur_avec_fusil.action_tirer(joueur_cible, fusil.tirer())
             if pv_perdu:
                 texte_info = font_petit.render(f"{joueur_cible.nom} a pris une balle !", True, TEXTE)
                 screen.blit(texte_info, (250, 500))
                 pygame.display.flip()
-                time.sleep(1)
             else:
                 texte_info = font_petit.render("Balle a blanc ! Rien n'est arrive.", True, TEXTE)
                 screen.blit(texte_info, (250, 500))
                 pygame.display.flip()
-                time.sleep(1)
+            
             if joueur_cible.vient_de_perdre_pv or joueur_avec_fusil!=joueur_cible: #Le joueur vient de toucher (lui ou le bot) ou tirer a blanc sur l'autre => on change de joueur
                 joueur_avec_fusil=(joueur if joueur_avec_fusil.is_bot else bot)
                 dessiner_pv(joueur, 100, 250)
                 dessiner_pv(bot, 500, 250)
                 pygame.display.flip()
+                time.sleep(2)
+                
                 while joueur_avec_fusil.is_bot and bot.est_vivant() and joueur.est_vivant(): #Le bot rejoue tant que c'est a lui (s'il se tire a blanc dessus) et si tout le monde est en vie
                     #STRAT DU BOT 
-                    time.sleep(3)
+                    refresh()
+                    
                     if joueur_avec_fusil.pv == 1: #S’il est en danger, le bot tire uniquement sur le joueur
                         joueur_cible = joueur
                     else: #50% de chance de se tirer ou tirer l'autre
                         joueur_cible = bot if random.random() > 0.5 else joueur
+                    
                     pv_perdu = joueur_avec_fusil.action_tirer(joueur_cible, fusil.tirer())
                     if pv_perdu:
                         texte_info = font_petit.render(f"{joueur_cible.nom} a pris une balle !", True, TEXTE)
                         screen.blit(texte_info, (250, 500))
                         pygame.display.flip()
-                        time.sleep(1)
                     else:
                         texte_info = font_petit.render("Balle a blanc ! Rien n'est arrive.", True, TEXTE)
                         screen.blit(texte_info, (250, 500))
                         pygame.display.flip()
-                        time.sleep(1)
+                    
                     if joueur_cible.vient_de_perdre_pv or joueur_avec_fusil!=joueur_cible: #Le bot vient de toucher (lui ou le joueur) ou tirer a blanc sur l'autre => on change de joueur
                         joueur_avec_fusil=joueur
+                        dessiner_pv(joueur, 100, 250)
+                        dessiner_pv(bot, 500, 250)
+                        pygame.display.flip()
+                        time.sleep(2)
 
-    #Dessiner fond
-    dessiner_fond()
-
-    #Dessiner personnages
-    dessiner_perso(joueur, 100, 300)
-    dessiner_perso(bot, 500, 300)
-
-    #Dessiner PV
-    dessiner_pv(joueur, 100, 250)
-    dessiner_pv(bot, 500, 250)
-
-    #Actualiser l'ecran
-    pygame.display.flip()
+    refresh()
     pygame.time.Clock().tick(60)
 
-time.sleep(2)
+if bot.est_vivant():
+    texte_info = font.render(f"{joueur.nom} est mort ! {bot.nom} a gagner !", True, TEXTE)
+    screen.blit(texte_info, (250, 500))
+    pygame.display.flip()
+else:
+    texte_info = font.render(f"{bot.nom} est mort ! {joueur.nom} a gagner !", True, TEXTE)
+    screen.blit(texte_info, (250, 500))
+    pygame.display.flip()
+
+time.sleep(4)
 pygame.quit()
