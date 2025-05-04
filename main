@@ -123,11 +123,11 @@ while running:
     pygame.time.Clock().tick(60)
 
 if bot.est_vivant():
-    texte_info = font.render(f"{joueur.nom} est mort ! {bot.nom} a gagner !", True, TEXTE)
+    texte_info = font.render(f"{joueur.nom} est mort ! {bot.nom} a gagné !", True, TEXTE)
     screen.blit(texte_info, (250, 500))
     pygame.display.flip()
 else:
-    texte_info = font.render(f"{bot.nom} est mort ! {joueur.nom} a gagner !", True, TEXTE)
+    texte_info = font.render(f"{bot.nom} est mort ! {joueur.nom} a gagné !", True, TEXTE)
     screen.blit(texte_info, (250, 500))
     pygame.display.flip()
 
