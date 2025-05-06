@@ -20,6 +20,9 @@ font_petit = pygame.font.Font(None, 24)
 
 #Fonction pour dessiner le fond et les elements du jeu
 def refresh():
+    """ Rafraîchit l'ecran en redessinant le fond, le joueur, le bot, les pv du joueur et les pv du joueur puis actualise l'ecran
+        Pas de parametres
+        None"""
      #Dessiner fond
     dessiner_fond()
     
@@ -35,18 +38,27 @@ def refresh():
     pygame.display.flip()
 
 def dessiner_fond():
+    """ Renvoie le sprite du fond en fonction d'une image donnee
+        Pas de parametres
+        None"""
     #Fond Tour Eiffel
     screen.fill(FOND_PARIS)
     #screen.blit(tour_eiffel, (200, 1))  #Position a ajuster selon image
     pygame.draw.rect(screen, BLEU, (0, 0, LARGEUR, HAUTEUR // 6))  #Bande bleue en haut (bleu France)
 
 def dessiner_perso(perso, x, y):
+    """ Renvoie le sprite du personnage ainsi que son nom en fonction d'une image donnee
+        Pas de parametres
+        None"""
     #Affiche les perso avec leur beret (et un petit effet si mort)
     #screen.blit(beret_image, (x, y))
     texte_nom = font.render(perso.nom, True, TEXTE)
     screen.blit(texte_nom, (x - 20, y + 50))  #Affiche le nom du personnage
 
 def dessiner_pv(perso, x, y):
+    """ Dessine les pv du joueur
+        Pas de parametres 
+        None"""
     #Barre de PV
     pygame.draw.rect(screen, PV_FOND, (x, y, 200, 20))
     pygame.draw.rect(screen, PV_BARRE, (x, y, 200 * (perso.pv / 3), 20))  #Ratio PV restant
@@ -123,11 +135,11 @@ while running:
     pygame.time.Clock().tick(60)
 
 if bot.est_vivant():
-    texte_info = font.render(f"{joueur.nom} est mort ! {bot.nom} a gagné !", True, TEXTE)
+    texte_info = font.render(f"{joueur.nom} est mort ! {bot.nom} a gagne !", True, TEXTE)
     screen.blit(texte_info, (250, 500))
     pygame.display.flip()
 else:
-    texte_info = font.render(f"{bot.nom} est mort ! {joueur.nom} a gagné !", True, TEXTE)
+    texte_info = font.render(f"{bot.nom} est mort ! {joueur.nom} a gagne !", True, TEXTE)
     screen.blit(texte_info, (250, 500))
     pygame.display.flip()
 
