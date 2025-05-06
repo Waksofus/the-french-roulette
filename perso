@@ -33,28 +33,45 @@ class Perso:
         print(f"{self.nom}({self.pv}PV) tire une balle sur {joueur_cible.nom}({joueur_cible.pv}PV)")
         if balle_est_chargee:
             joueur_cible.perdre_pv()
-            print(f"Aïe ! {joueur_cible.nom} a perdu un PV : il lui reste {joueur_cible.pv}PV")
-            print("")
+            print(f"Aïe ! {joueur_cible.nom} a perdu un PV : il lui reste {joueur_cible.pv}PV\n")
             return True
         else:
-            print(f"Ouf ! {joueur_cible.nom} n'a pas pris de degats : la balle etait a blanc !")
-            print("")
+            print(f"Ouf ! {joueur_cible.nom} n'a pas pris de degats : la balle etait a blanc !\n")
             return False 
 
-print("==========Resultats/Asserts==========")
-print("")
+print("=======Exemple de fonctionnement=======\n")
+Joueur1 = Perso("Joueur") # Creation des personnages 
+Bot = Perso("Bot", True)
+
+Joueur1.action_tirer(Bot,True) # Si balle chargee -> degats sinon pas de degats
+Joueur1.action_tirer(Bot,False)
+
+Bot.action_tirer(Joueur1,True) # Cela fonctionne dans les deux sens 
+
+print(Joueur1.est_vivant()) # PV pas tous perdus -> vivant 
+
+for i in range (2):
+    Joueur1.action_tirer(Bot,True)
+print(Bot.est_vivant()) # PV tous perdus -> N'est plus vivant
+print("Le bot n'est plus vivant !\n") 
+
+print("==========Resultats/Asserts==========\n")
 humain = Perso("Jean")
 ordi = Perso("Jean_Bon", True)
 assert(humain.is_bot == False)
 assert(ordi.is_bot == True)
 assert(humain.est_vivant() == True)
+
 pv_humain_base = 3
 humain.perdre_pv()
 assert(humain.pv == pv_humain_base - 1 )
+
 for i in range(2):
     humain.perdre_pv()
 assert(humain.est_vivant() == False)
+
 chargee = humain.action_tirer(ordi,True)
 assert(chargee == True)
+
 non_chargee = humain.action_tirer(ordi,False)
 assert(non_chargee == False)
