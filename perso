@@ -1,25 +1,76 @@
 class Perso:
-    def __init__(self, nom, is_bot=False): #Initialisation de la classe Personnage
+    def __init__(self, nom, is_bot=False): # Initialisation de la classe Personnage
+        """ Initialise le nom du perso, ses PV, s'il est un bot et s'il vient de perdre des PV 
+            nom : Str
+            is_bot : Bool
+            Preconditions -> is_bot = False si pas de parametre precise
+            None"""
         self.nom = nom
         self.pv = 3
         self.is_bot = is_bot
         self.vient_de_perdre_pv=False
 
-    def est_vivant(self): #Methode qui renvoie si le perso est vivant ou non
+    def est_vivant(self): # Methode qui renvoie si le perso est vivant ou non
+        """ Renvoie True si les pv du perso sont au-dessus de 0
+            Pas de parametres
+            Bool"""
         return self.pv > 0
 
-    def perdre_pv(self): #Methode qui enleve un PV au perso
+    def perdre_pv(self): # Methode qui enleve un PV au perso
+        """ Enleve un pv au perso et change la valeur de la variable "vient_de_perdre_pv" 
+            Pas de parametres 
+            None"""
         self.pv -= 1
         self.vient_de_perdre_pv=True
 
-    def action_tirer(self, joueur_cible, balle_est_chargee): #Methode qui permet de choisir sur qui tirer et qui enleve des PV si necessaire
+    def action_tirer(self, joueur_cible, balle_est_chargee): # Methode qui permet de choisir sur qui tirer et qui enleve des PV si necessaire
+        """ Renvoie True si la balle tiree sur le joueur etait chargee, renvoit False sinon
+            joueur_cible : Str
+            balle_est_chargee : Bool
+            Bool"""
         # Logique du tir
         joueur_cible.vient_de_perdre_pv=False
         print(f"{self.nom}({self.pv}PV) tire une balle sur {joueur_cible.nom}({joueur_cible.pv}PV)")
         if balle_est_chargee:
             joueur_cible.perdre_pv()
             print(f"Aïe ! {joueur_cible.nom} a perdu un PV : il lui reste {joueur_cible.pv}PV")
+            print("")
             return True
         else:
             print(f"Ouf ! {joueur_cible.nom} n'a pas pris de degats : la balle etait a blanc !")
-            return False
+            print("")
+            return False 
+
+
+Joueur1 = Perso("Joueur") # Creation des personnages 
+Bot = Perso("Bot", True)
+
+Joueur1.action_tirer(Bot,True) # Si balle chargee -> degats sinon pas de degats
+Joueur1.action_tirer(Bot,False)
+
+Bot.action_tirer(Joueur1,True) # Cela fonctionne dans les deux sens 
+
+print(Joueur1.est_vivant()) # PV pas tous perdus -> vivant 
+
+for i in range (2):
+    Joueur1.action_tirer(Bot,True)
+print(Bot.est_vivant()) # PV tous perdus -> N'est plus vivant
+print("Le bot n'est plus vivant !") 
+
+print("==========Resultats/Asserts==========")
+print("")
+humain = Perso("Jean")
+ordi = Perso("Jean_Bon", True)
+assert(humain.is_bot == False)
+assert(ordi.is_bot == True)
+assert(humain.est_vivant() == True)
+pv_humain = 3
+humain.perdre_pv()
+assert(humain.pv == pv_humain - 1 )
+for i in range(2):
+    humain.perdre_pv()
+assert(humain.est_vivant() == False)
+chargee = humain.action_tirer(ordi,True)
+assert(chargee == True)
+non_chargee = humain.action_tirer(ordi,False)
+assert(non_chargee == False)
