@@ -12,7 +12,8 @@ class Balle:
             Pas de parametres
             None """
         return self.chargee
-    
+
+print("=======Exemple de fonctionnement=======\n")
 balle1 = Balle() # Creation de 6 balles 
 balle2 = Balle()
 balle3 = Balle()
@@ -25,8 +26,9 @@ liste_de_balles = [balle1,balle2,balle3,balle4,balle5,balle6]
 for balle in liste_de_balles : # On print les balles qui sont chargees 
     if balle.est_chargee() > 0.5:
         print(balle.chargee)
+print("")
 
-print("===============Resultats/Assert===============")
+print("===============Resultats/Assert===============\n")
 balle = Balle()
 chargee = balle.est_chargee()
 assert(isinstance(chargee,bool))
