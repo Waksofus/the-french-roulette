@@ -1,8 +1,24 @@
 import random
-from balle import Balle
+
+class Balle:
+    def __init__(self): # Initialisation de la classe Balle
+        """ Cree une variable "balle chargee" si la valeur aleatoire obtenue est superieure a 0.5
+            Pas de parametres
+            None """
+        self.chargee = random.random() > 0.5 # Determine si la balle est pleine de maniere aleatoire
+
+    def est_chargee(self): # Methode qui renvoie si la balle est chargee ou non
+        """ Renvoie la balle chargee
+            Pas de parametres
+            None """
+        return self.chargee
 
 class Fusil:
-    def __init__(self, nb_balles=6): #Initialisation de la classe Fusil
+    def __init__(self, nb_balles=6): # Initialisation de la classe Fusil
+        """Initialise le nombre de balles, balles chargees, balles a blanc, l'ordre des balles dans le fusil sous forme de liste, l'index et recharge le fusil
+           nb_balles : Int 
+           Preconditions -> nb_balles > 0 et = 6 si pas de parametres
+           None"""
         self.nb_balles = nb_balles
         self.nb_balles_chargees=0
         self.nb_balles_blanc=0
@@ -10,7 +26,10 @@ class Fusil:
         self.index = 0
         self.recharger()
 
-    def recharger(self): #Methode qui creer une liste de balles dans le fusil
+    def recharger(self): # Methode qui creer une liste de balles dans le fusil
+        """Renvoie la liste de l'ordre des balles (chargees et blanches) dans le fusil
+           Pas de parametres
+           None"""
         self.balles = []
         for i in range(self.nb_balles):
             new_balle=Balle()
@@ -18,24 +37,65 @@ class Fusil:
                 self.nb_balles_chargees+=1
             else:
                 self.nb_balles_blanc+=1
-            if i == self.nb_balles-1: #Au moment d'ajouter la derniere balle on s'assure qu'elle soit differente des precedentes
+            if i == self.nb_balles-1: # Au moment d'ajouter la derniere balle on s'assure qu'elle soit differente des precedentes
                 if self.nb_balles_blanc == 0:
                     new_balle.chargee = True
                 elif self.nb_balles_chargees == 0:
                     new_balle.chargee = False
             self.balles.append(new_balle)
-        random.shuffle(self.balles) #On remelange les balles pour etre sur qu'elles soient bien melangees
+        random.shuffle(self.balles) # On re-melange les balles pour etre sur qu'elles soient bien melangees
         self.index = 0
         print("[Fusil] Recharge avec de nouvelles balles !")
+        print("")
 
-    def tirer(self): #Methode qui renvoie le type de balle
+    def tirer(self): # Methode qui renvoie le type de balle
+        """ Recharge le fusil s'il n'y a plus de balles dedans. Renvoie True si balle chargee, False sinon.
+            Pas de parametres
+            Bool"""
         if self.index >= self.nb_balles:
             print("[Fusil] Plus de balles dans le fusil ! On recharge !")
             self.recharger()
-
         balle = self.balles[self.index]
         self.index += 1
         return balle.est_chargee()
 
-    def balles_restantes(self): #Methode qui regarde le nombre de balles restantes
+    def balles_restantes(self): # Methode qui regarde le nombre de balles restantes
+        """ Renvoie le nombre de balles restantes dans le fusil
+            Pas de parametres
+            Int"""
         return self.nb_balles - self.index
+    
+
+print("")
+fusil = Fusil() # On charge le fusil de 6 balles et on verifie le nb de balles apres un tir 
+
+fusil.tirer()
+print("Il reste " + str(fusil.balles_restantes()) + " balles.")
+print("")
+
+fusil.tirer()
+print("Il reste " + str(fusil.balles_restantes()) + " balles.")
+print("")
+
+for i in range(4):
+    fusil.tirer()
+print("Il reste " + str(fusil.balles_restantes()) + " balles. Le fusil est vide !") # Plus aucune balle 
+print("")
+
+fusil.tirer()
+print("Il reste " + str(fusil.balles_restantes()) + " balles.")   # Le fusil tire bel et bien, le nombre de balles descend et le fusil recharge automatiquement si plus de balles
+print("")
+
+print("==========Resultats/Asserts==========") # On teste chaque methode une a une pour voir que tout fonctionne bien 
+print("")
+fusil1 = Fusil()
+assert(fusil1.nb_balles == 6)
+
+fusil1.recharger()
+assert(len(fusil1.balles) == 6)
+
+resultat = fusil1.tirer()
+assert isinstance(resultat, bool) # On regarde si le resultat est bien un BOOL 
+
+nombre_balles_restantes = fusil1.balles_restantes()
+assert(nombre_balles_restantes == 5)
