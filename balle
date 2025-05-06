@@ -1,8 +1,32 @@
-import random
+import random 
 
 class Balle:
-    def __init__(self): #Initialisation de la classe Balle
-        self.chargee = random.random() > 0.5 #Determine si la balle est pleine de maniere aleatoire
+    def __init__(self): # Initialisation de la classe Balle
+        """ Cree une variable "balle chargee" si la valeur aleatoire obtenue est superieure a 0.5
+            Pas de parametres
+            None """
+        self.chargee = random.random() > 0.5 # Determine si la balle est pleine de maniere aleatoire
 
-    def est_chargee(self): #Methode qui renvoie si la balle est chargee ou non
+    def est_chargee(self): # Methode qui renvoie si la balle est chargee ou non
+        """ Renvoie la balle chargee
+            Pas de parametres
+            None """
         return self.chargee
+    
+balle1 = Balle() # Creation de 6 balles 
+balle2 = Balle()
+balle3 = Balle()
+balle4 = Balle()
+balle5 = Balle()
+balle6 = Balle()
+
+liste_de_balles = [balle1,balle2,balle3,balle4,balle5,balle6]
+
+for balle in liste_de_balles : # On print les balles qui sont chargees 
+    if balle.est_chargee() > 0.5:
+        print(balle.chargee)
+
+print("===============Resultats/Assert===============")
+balle = Balle()
+chargee = balle.est_chargee()
+assert(isinstance(chargee,bool))
