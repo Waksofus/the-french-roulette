@@ -41,22 +41,6 @@ class Perso:
             print("")
             return False 
 
-
-Joueur1 = Perso("Joueur") # Creation des personnages 
-Bot = Perso("Bot", True)
-
-Joueur1.action_tirer(Bot,True) # Si balle chargee -> degats sinon pas de degats
-Joueur1.action_tirer(Bot,False)
-
-Bot.action_tirer(Joueur1,True) # Cela fonctionne dans les deux sens 
-
-print(Joueur1.est_vivant()) # PV pas tous perdus -> vivant 
-
-for i in range (2):
-    Joueur1.action_tirer(Bot,True)
-print(Bot.est_vivant()) # PV tous perdus -> N'est plus vivant
-print("Le bot n'est plus vivant !") 
-
 print("==========Resultats/Asserts==========")
 print("")
 humain = Perso("Jean")
@@ -64,9 +48,9 @@ ordi = Perso("Jean_Bon", True)
 assert(humain.is_bot == False)
 assert(ordi.is_bot == True)
 assert(humain.est_vivant() == True)
-pv_humain = 3
+pv_humain_base = 3
 humain.perdre_pv()
-assert(humain.pv == pv_humain - 1 )
+assert(humain.pv == pv_humain_base - 1 )
 for i in range(2):
     humain.perdre_pv()
 assert(humain.est_vivant() == False)
