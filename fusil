@@ -45,8 +45,7 @@ class Fusil:
             self.balles.append(new_balle)
         random.shuffle(self.balles) # On re-melange les balles pour etre sur qu'elles soient bien melangees
         self.index = 0
-        print("[Fusil] Recharge avec de nouvelles balles !")
-        print("")
+        print("[Fusil] Recharge avec de nouvelles balles !\n")
 
     def tirer(self): # Methode qui renvoie le type de balle
         """ Recharge le fusil s'il n'y a plus de balles dedans. Renvoie True si balle chargee, False sinon.
@@ -65,29 +64,23 @@ class Fusil:
             Int"""
         return self.nb_balles - self.index
     
-
-print("")
+print("=======Exemple de fonctionnement=======\n")
 fusil = Fusil() # On charge le fusil de 6 balles et on verifie le nb de balles apres un tir 
 
 fusil.tirer()
-print("Il reste " + str(fusil.balles_restantes()) + " balles.")
-print("")
+print("Il reste " + str(fusil.balles_restantes()) + " balles.\n")
 
 fusil.tirer()
-print("Il reste " + str(fusil.balles_restantes()) + " balles.")
-print("")
+print("Il reste " + str(fusil.balles_restantes()) + " balles.\n")
 
 for i in range(4):
     fusil.tirer()
-print("Il reste " + str(fusil.balles_restantes()) + " balles. Le fusil est vide !") # Plus aucune balle 
-print("")
+print("Il reste " + str(fusil.balles_restantes()) + " balles. Le fusil est vide !\n") # Plus aucune balle 
 
 fusil.tirer()
-print("Il reste " + str(fusil.balles_restantes()) + " balles.")   # Le fusil tire bel et bien, le nombre de balles descend et le fusil recharge automatiquement si plus de balles
-print("")
+print("Il reste " + str(fusil.balles_restantes()) + " balles.\n")   # Le fusil tire bel et bien, le nombre de balles descend et le fusil recharge automatiquement si plus de balles
 
-print("==========Resultats/Asserts==========") # On teste chaque methode une a une pour voir que tout fonctionne bien 
-print("")
+print("==========Resultats/Asserts==========\n") # On teste chaque methode une a une pour voir que tout fonctionne bien 
 fusil1 = Fusil()
 assert(fusil1.nb_balles == 6)
 
