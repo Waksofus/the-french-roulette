@@ -1,13 +1,14 @@
 #Bibliotheque
 import time
+import os
 import random
 import pygame
 from perso import Perso
 from fusil import Fusil
 from couleurs import BLEU, ROUGE, FOND_PARIS, FROMAGE, BAGUETTE, BERET, TEXTE, PV_BARRE, PV_FOND
-
 #Initialisation de Pygame
 pygame.init()
+base_file = os.path.dirname(__file__) # Pour recuperer le chemin du fichier
 
 #Configurations de la fenetre
 LARGEUR, HAUTEUR = 800, 600
@@ -46,12 +47,25 @@ def dessiner_fond():
     #screen.blit(tour_eiffel, (200, 1))  #Position a ajuster selon image
     pygame.draw.rect(screen, BLEU, (0, 0, LARGEUR, HAUTEUR // 6))  #Bande bleue en haut (bleu France)
 
+#Image du joueur	
+perso_path = os.path.join(base_file, "assets","perso_sprite.png")
+perso_sprite = pygame.image.load(perso_path) #Image a telecharger/ajouter
+perso_scaled = pygame.transform.scale(perso_sprite, (200, 150)) #Ajuster l'echelle de l'image
+#Image du bot
+bot_path = os.path.join(base_file, "assets","bot_sprite.png")
+bot_sprite = pygame.image.load(bot_path) 
+bot_scaled = pygame.transform.scale(bot_sprite, (200, 150)) 
+
+
 def dessiner_perso(perso, x, y):
     """ Renvoie le sprite du personnage ainsi que son nom en fonction d'une image donnee
         Pas de parametres
         None"""
     #Affiche les perso avec leur beret (et un petit effet si mort)
-    #screen.blit(beret_image, (x, y))
+    if perso.is_bot:
+        screen.blit(bot_scaled, (x+20, y))
+    else:
+        screen.blit(perso_scaled, (x+20, y))
     texte_nom = font.render(perso.nom, True, TEXTE)
     screen.blit(texte_nom, (x - 20, y + 50))  #Affiche le nom du personnage
 
